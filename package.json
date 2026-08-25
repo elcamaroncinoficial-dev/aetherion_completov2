@@ -1,0 +1,12 @@
+{
+  "name": "aetherion",
+  "version": "1.0.0",
+  "description": "Aetherion: La Guerra del Eclipse — servidor y cliente multijugador",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

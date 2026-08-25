@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Aetherion — La Guerra del Eclipse</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<!-- ======= PANTALLA DE INGRESO ======= -->
+<div id="pantallaLogin" class="pantalla">
+  <div class="login-card">
+    <h1>AETHERION</h1>
+    <p class="subtitulo">La Guerra del Eclipse</p>
+
+    <label>Tu nombre</label>
+    <input type="text" id="inputNombre" placeholder="¿Cómo te llamas?" maxlength="18">
+
+    <label>Elige tu personaje</label>
+    <div class="grid-personajes" id="gridPersonajes">
+      <button class="personaje-btn" data-p="mago"><span class="emoji">🧙</span>El Mago<small>Azul</small></button>
+      <button class="personaje-btn" data-p="guerrero"><span class="emoji">🛡️</span>El Guerrero<small>Azul</small></button>
+      <button class="personaje-btn" data-p="alquimista"><span class="emoji">🧪</span>El Alquimista<small>Azul</small></button>
+      <button class="personaje-btn" data-p="helada"><span class="emoji">❄️</span>La Helada<small>Rojo</small></button>
+      <button class="personaje-btn" data-p="sombra"><span class="emoji">🌑</span>La Sombra<small>Rojo</small></button>
+      <button class="personaje-btn" data-p="hijoDragon"><span class="emoji">🐉</span>Hijo del Dragón<small>Rojo</small></button>
+    </div>
+
+    <button id="btnUnirse" class="btn-dorado" disabled>Unirme a la partida</button>
+    <div class="login-status" id="loginStatus"></div>
+  </div>
+</div>
+
+<!-- ======= PANTALLA DE JUEGO ======= -->
+<div id="pantallaJuego" class="pantalla" style="display:none;">
+
+  <div class="topbar">
+    <div class="topbar-title">AETHERION</div>
+    <div class="turno-indicador" id="turnoIndicador">—</div>
+  </div>
+
+  <div class="panel-jugadores" id="panelJugadores"></div>
+
+  <div class="board-wrap" id="boardWrap">
+    <img id="imgTablero" src="/img/tablero.jpg" draggable="false">
+    <div id="fichasCapa"></div>
+  </div>
+
+  <div class="controles">
+    <div class="dado-wrap">
+      <div class="dado3d" id="dado3d">
+        <div class="cara cara-1"><span class="pip"></span></div>
+        <div class="cara cara-2"><span class="pip"></span><span class="pip"></span></div>
+        <div class="cara cara-3"><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+        <div class="cara cara-4"><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+        <div class="cara cara-5"><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+        <div class="cara cara-6"><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+      </div>
+    </div>
+    <button id="btnTirarDado" class="btn-dorado" disabled>🎲 Tirar dado</button>
+    <button id="btnPasarTurno" class="btn-secundario" disabled>Pasar turno</button>
+  </div>
+
+  <div class="mano-wrap">
+    <div class="mano-titulo">Tu mano de Poder</div>
+    <div class="mano-cartas" id="manoCartas"></div>
+  </div>
+
+  <div class="log-wrap" id="logWrap"></div>
+</div>
+
+<div id="toastCapa" class="toast-capa"></div>
+
+<!-- ======= MODAL: carta de Trampa/Portal/Poder ======= -->
+<div id="modalCarta" class="modal-overlay" style="display:none;">
+  <div class="modal-contenido">
+    <div class="scene">
+      <div class="card3d" id="cardTrampaPortal">
+        <div class="face back"><img id="imgCartaReverso" src=""></div>
+        <div class="face front"><img id="imgCartaFrente" src=""></div>
+      </div>
+    </div>
+    <div class="tap-hint" id="tapHintCarta">👆 Toca la carta</div>
+    <div class="effect-banner" id="effectBanner"></div>
+    <button class="btn-dorado" id="btnContinuarCarta" style="display:none;">Continuar</button>
+  </div>
+</div>
+
+<!-- ======= MODAL: Combate ======= -->
+<div id="modalCombate" class="modal-overlay" style="display:none;">
+  <div class="modal-contenido">
+    <div class="scene">
+      <div class="card3d" id="cardCombate">
+        <div class="face back"><img src="/cartas/combate/reverso.jpg"></div>
+        <div class="face front"><img id="imgCombateFrente" src=""></div>
+      </div>
+    </div>
+    <div class="tap-hint" id="tapHintCombate">👆 Toca la carta</div>
+
+    <div class="timer-wrap" id="timerWrap">
+      <div class="timer-label"><span>Tiempo</span><span id="timerNum">30s</span></div>
+      <div class="timer-bar-bg"><div class="timer-bar" id="timerBar"></div></div>
+    </div>
+
+    <div class="answer-wrap" id="answerWrap">
+      <input type="text" id="answerInput" placeholder="Tu respuesta…" autocomplete="off">
+      <button class="btn-dorado" id="btnResponder">Responder</button>
+    </div>
+
+    <div class="result-banner" id="resultBanner"></div>
+
+    <div class="scene" id="sceneRespuesta" style="display:none;">
+      <div class="card3d" id="cardRespuesta">
+        <div class="face back"><img src="/cartas/respuesta/reverso.jpg"></div>
+        <div class="face front"><img id="imgRespuestaFrente" src=""></div>
+      </div>
+    </div>
+    <div class="tap-hint" id="tapHintRespuesta" style="display:none;">👆 Toca para ver la respuesta oficial</div>
+
+    <div class="options-wrap" id="optionsWrapCombate">
+      <div class="opt-title" id="optTitleCombate">Elige una opción</div>
+      <button class="action-btn option" id="optACombate">Opción A</button>
+      <button class="action-btn option" id="optBCombate">Opción B</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======= MODAL: elegir objetivo ======= -->
+<div id="modalObjetivo" class="modal-overlay" style="display:none;">
+  <div class="modal-contenido">
+    <div class="objetivo-titulo" id="objetivoTitulo">Elige a un jugador</div>
+    <div class="objetivo-lista" id="objetivoLista"></div>
+    <button class="btn-secundario" id="btnCancelarObjetivo">Cancelar</button>
+  </div>
+</div>
+
+<script src="/client.js"></script>
+</body>
+</html>
